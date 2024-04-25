@@ -2,7 +2,6 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * CISC 380 Algorithms Assignment 5 & 6
  * 
@@ -15,7 +14,7 @@ public class DirectedGraph {
 
 	private static final boolean DEBUG = false;
 	private ArrayList<DirectedGraphNode> nodes;
-
+	private int clock;
 
 	/**
 	 * Constructs a directed graph with the given adjacency matrix. The adjacency
@@ -23,6 +22,7 @@ public class DirectedGraph {
 	 * graph.
 	 * 
 	 * An edge from vertex i to vertex j exists if adacencyMatrix[i][j] is true.
+	 * 
 	 * @param adjacencyMatrix a 2d boolean array representing an adjacency matrix.
 	 */
 	public DirectedGraph(boolean[][] adjacencyMatrix) {
@@ -39,7 +39,7 @@ public class DirectedGraph {
 			for (int j = 0; j < adjacencyMatrix[i].length; j++) {
 				if (adjacencyMatrix[i][j]) {
 					this.connect(i, j);
-				}//if
+				} // if
 			}
 		}
 
@@ -53,11 +53,11 @@ public class DirectedGraph {
 	 * 
 	 * Values that are negative or greater than length of adjacencyList are ignored.
 	 * 
-	 * @param adjacencyList a 2d integer array representing an adjacency list of the vertices.
+	 * @param adjacencyList a 2d integer array representing an adjacency list of the
+	 *                      vertices.
 	 */
 
-	
-	public DirectedGraph(int[][] adjacencyList) {  //have an uphill adjacency list and a downhill adjacency list
+	public DirectedGraph(int[][] adjacencyList) { // have an uphill adjacency list and a downhill adjacency list
 		nodes = new ArrayList<DirectedGraphNode>();
 
 		// populates the graph with nodes.
@@ -89,8 +89,7 @@ public class DirectedGraph {
 	public int getMinVertexCover() {
 
 		int result = -1;
-	
-		
+
 		if (this.isAcyclic() && this.hasValidDegrees()) {
 			result++;
 			for (DirectedGraphNode root : this.findRoots()) {
@@ -119,7 +118,7 @@ public class DirectedGraph {
 	 */
 	private int vCover(DirectedGraphNode root) {
 
-		//YOUR CODE HERE (Assignment 5 only)
+		// YOUR CODE HERE (Assignment 5 only)
 		return -1;
 
 	}// vCover
@@ -127,14 +126,15 @@ public class DirectedGraph {
 	/**
 	 * Prints the vertices (the data field for each DirectedGraphNode) included in
 	 * the smallest vertex cover (i.e. the vertices the correspond to the number
-	 * returned by getMinVertexCover(). Note that this method should first call the getMinVertexCover
+	 * returned by getMinVertexCover(). Note that this method should first call the
+	 * getMinVertexCover
 	 * method to ensure that the needed coverSize fields are updated.
 	 *
 	 * Runs in linear time.
 	 * 
 	 */
 	public void printCover() {
-		//YOUR CODE HERE (Assignment 5 only)
+		// YOUR CODE HERE (Assignment 5 only)
 	}// printCover
 
 	/**
@@ -143,10 +143,37 @@ public class DirectedGraph {
 	 * @return true, if there are no cycles, false otherwise.
 	 */
 	public boolean isAcyclic() {
-        //YOUR CODE HERE (Assignment 6 only)
+		// YOUR CODE HERE (Assignment 6 only)
+		clock = 1;
+		for (DirectedGraphNode node : nodes) {
+			if (!node.visited) {
+				explorePP(node);
+			}
+		}
+
+		for (DirectedGraphNode node : nodes) {
+			for (DirectedGraphNode outNode : node.outgoingNodes) {
+				if (node.pre > outNode.pre && node.post < outNode.post) {
+					return false;
+				}
+			}
+		}
+
 		return true;
 	}// isAcyclic
 
+	private void explorePP(DirectedGraphNode node) {
+		node.visited = true;
+		node.pre = clock;
+		clock++;
+		for (DirectedGraphNode outNodes : node.getOutgoingNodes()) {
+			if (!outNodes.visited) {
+				explorePP(outNodes);
+			}
+		}
+		node.post = clock;
+		clock++;
+	}
 
 	/**
 	 * Retrieves the number of nodes in the Graph.
@@ -165,16 +192,16 @@ public class DirectedGraph {
 	 */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		
+
 		// for every node
 		for (int i = 0; i < this.nodes.size(); i++) {
 			// append the string representation to the result.
 			DirectedGraphNode current = this.nodes.get(i);
-			sb.append(String.format("%-8s vCover: %3d Out: %3d In: %3d\n", current.toString(),current.getCoverSize(),current.getOutDegree(),current.getInDegree()));
+			sb.append(String.format("%-8s vCover: %3d Out: %3d In: %3d\n", current.toString(), current.getCoverSize(),
+					current.getOutDegree(), current.getInDegree()));
 		}
 		return sb.toString();
 	}// toString
-
 
 	/**
 	 * adds the node other as a neighbor to root.
@@ -182,7 +209,7 @@ public class DirectedGraph {
 	 * @param root  the data of the node to receive a neighbor
 	 * @param other the data of the node to be added
 	 */
-	
+
 	private void connect(int root, int other) {
 
 		if (0 > root || root >= this.getGraphSize()) {
@@ -212,17 +239,16 @@ public class DirectedGraph {
 	 * @return a DirectedGraphNode with the given data.
 	 * 
 	 */
-	
+
 	private DirectedGraphNode findNode(int data) {
-		if(0 <= data && data < this.nodes.size()){
+		if (0 <= data && data < this.nodes.size()) {
 			return nodes.get(data);
-		}else{
+		} else {
 			return null;
 		}
-		
 
 	}// findNode
-	
+
 	/**
 	 * returns an array of integers, representing the vertices that are roots in the
 	 * Directed Graph
@@ -230,18 +256,18 @@ public class DirectedGraph {
 	 * @return an array of integers that are roots, or an empty list if there is
 	 *         none.
 	 */
-	
+
 	private List<DirectedGraphNode> findRoots() {
 
 		ArrayList<DirectedGraphNode> result = new ArrayList<DirectedGraphNode>();
 
 		// a node is a root if it has an indegree of 0
 		// add all nodes with an indegree of 0 to the result array.
-		for(DirectedGraphNode node: this.nodes){
-			if(node.getInDegree() == 0){
+		for (DirectedGraphNode node : this.nodes) {
+			if (node.getInDegree() == 0) {
 				result.add(node);
-			}//if
-		}//for
+			} // if
+		} // for
 
 		return result;
 	}// findRoots
@@ -252,7 +278,7 @@ public class DirectedGraph {
 	 * @return true, if all nodes have an in-degree of 0 or 1. False otherwise.
 	 * 
 	 */
-	
+
 	private boolean hasValidDegrees() {
 		boolean result = true;
 
@@ -265,8 +291,6 @@ public class DirectedGraph {
 
 	}// hasValidDegrees
 
-	
-
 	/**
 	 * Representation of a vertex of the graph, uniquely identified by the data.
 	 */
@@ -276,6 +300,9 @@ public class DirectedGraph {
 		private int inDegree;
 
 		private Integer coverSize;
+		private int post;
+		private int pre;
+		private boolean visited;
 
 		private LinkedList<DirectedGraphNode> outgoingNodes;
 
@@ -285,34 +312,36 @@ public class DirectedGraph {
 			this.coverSize = null;
 			this.outgoingNodes = new LinkedList<DirectedGraphNode>();
 			this.inDegree = 0;
+			this.visited = false;
 
 		}// constructor
 
 		/**
-		 * increments the in degree. 
+		 * increments the in degree.
 		 * 
 		 */
 		public void incrementInDegree() {
 			this.inDegree++;
 		}
 
-		
 		/**
 		 * returns this node's in degree.
 		 * This is the amount of nodes that this node has as a parent.
+		 * 
 		 * @return the in degree of this node.
 		 */
-		
+
 		public int getInDegree() {
 			return this.inDegree;
-		}//getInDegree
+		}// getInDegree
 
 		/**
 		 * returns this node's out degree.
 		 * This is the amount of children nodes this node has.
+		 * 
 		 * @return the out degree of this node.
 		 */
-		
+
 		public int getOutDegree() {
 			return this.outgoingNodes.size();
 		}
