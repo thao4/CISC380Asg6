@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-
+import java.util.Queue;
 
 
 /**
@@ -217,6 +217,62 @@ public class ColoredGraph {
 	public Integer coloredMaze(int start, int end)
 	{
 		//YOUR CODE HERE
+		if(start == end){
+			return 0;
+		}
+		//Possible colors 
+		String[] colors = {"red", "yellow", "blue"};
+
+		//Queue to manage BFS
+		Queue <int[]> queue = new LinkedList<>();
+		return -1;
+
+		//Add initial from the start node that are red
+		GraphNode startNode = findNode(start);
+		for(Edge edge : startNode.getEdges()){
+			if(edge.getColor().equals("red")){
+				GraphNode other = edge.getOther(start);
+				//Index 0 indicating start with red
+				queue.add(new int[]{other.getData(), 0, 1});
+			}
+		}
+
+		//Implementing a visited array to keep track of node and the last color used 
+		boolean[][] visited = new boolean[node.size()][3]; //3 because there are 3 colors red, yellow, and blue 
+		visited[start][0] = true; //start is visited with a red color index 
+
+
+		//check if there are still nodes to be processed 
+		while(!queue.isEmpty()){
+			int[] current = queue.poll();
+			int currentNode = current[0];
+			int lastColorIndex = current[1];
+			int steps = current[2];
+
+			//retrieves the GraphNode object in correspondence to the current node being processed 
+			GraphNode node  = findNode(currentNode);
+			//calculates the index of the next color in the sequence 
+			int nextColorIndex = (lastColorIndex + 1) % 3;
+
+			for(Edge edge : node.getEdges()){
+				if(edge.getColor().equals(color[nextColorIndex])){
+					GraphNode other = edge.getOther(currentNode);
+					//Checks if next node is the end node and must end with a blue edge
+					if(other.getData() == end && nextColorIndex == 2){
+						return steps + 1;
+					}
+					//check if next node has not been visited with the current edge color
+					if(!visited[other.getData()][nextColorIndex]){
+						//marks the node as visited with the current color
+						visited[other.getData()][nextColorIndex]  = true;
+						//add the node with the new color 
+						queue.add(new int[]{other.getData(), nextColorIndex, steps + 1});
+					}
+				}
+			}
+
+		}
+		//return -1 if no path is found 
 		return -1;
 	}
 
