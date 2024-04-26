@@ -145,27 +145,30 @@ public class DirectedGraph {
 	public boolean isAcyclic() {
 		// YOUR CODE HERE (Assignment 6 only)
 		clock = 1;
+		// explore all nodes
 		for (DirectedGraphNode node : nodes) {
 			if (!node.visited) {
 				explorePP(node);
 			}
 		}
-
+		// check all edges
 		for (DirectedGraphNode node : nodes) {
 			for (DirectedGraphNode outNode : node.outgoingNodes) {
+				// if edge is a back edge, then there is a cycle
 				if (node.pre > outNode.pre && node.post < outNode.post) {
 					return false;
 				}
 			}
 		}
-
+		// no cycles found
 		return true;
 	}// isAcyclic
-
+	// explore algorithm using post and pres
 	private void explorePP(DirectedGraphNode node) {
 		node.visited = true;
 		node.pre = clock;
 		clock++;
+		// explore outgoing edges from node
 		for (DirectedGraphNode outNodes : node.getOutgoingNodes()) {
 			if (!outNodes.visited) {
 				explorePP(outNodes);
