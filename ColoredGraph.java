@@ -226,6 +226,7 @@ public class ColoredGraph {
 			List<Edge> edges = findNode(current).getEdges();
 			boolean next = false;
 
+			//graph traversal: navigate through the graph based on the edge color sequence of red -> yellow -> blue
 			for(Edge edge : edges){
 				if(edge.getColor().equals(requiredColor)){
 					current = edge.getOther(current).getData();
