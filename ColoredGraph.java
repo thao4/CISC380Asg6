@@ -273,8 +273,52 @@ public class ColoredGraph {
 	*/
 	public int[] getSolution(int start, int end)
 	{
-		//YOUR CODE HERE
-		return null;
+		List <Integer> path = new ArrayList<>();
+		String requiredColor = "red";
+		int current = start;
+		boolean pathComplete = false;
+		//adding start to path 
+		path.add(start);
+
+		//Keep looping until end is reached or no path is found 
+		while(current != end && !pathComplete){
+			List<Edge> edges = findNode(current).getEdges();
+			boolean next = false;
+
+			//graph traversal: navigate through the graph based on the edge color sequence of red -> yellow -> blue
+			for(Edge edge : edges){
+				if(edge.getColor().equals(requiredColor)){
+					current = edge.getOther(current).getData();
+					//add new vertex to path 
+					path.add(current);
+					next = true;
+
+					//Update the required color to the next color in the sequence
+					if(requiredColor.equals("red")){
+						requiredColor = "yellow";
+					}else if(requiredColor.equals("yellow")){
+						requiredColor = "blue";
+					}else if(requiredColor.equals("blue")){
+						requiredColor = "red";
+					}
+					break;
+				}
+			}
+			//If there is no next color found, then end the search 
+			if(!next){
+				pathComplete = true;
+			}
+		}
+		//Check if a valid path has been found and if we have successfully reached the end 
+		if(current == end && requiredColor.equals("red")){
+			//Convert List<Integer> to an int[]
+			int[] result = path.stream().mapToInt(i -> i).toArray();
+			return result;
+		}else{
+			
+			return null;
+
+		}
 	}
 
 
