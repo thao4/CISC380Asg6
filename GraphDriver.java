@@ -110,22 +110,69 @@ public class GraphDriver{
         };
         return new ColoredGraph(list, colors);
     }
+    /**
+        * Creates a colored graph. There is one valid colored path from start = 0 to t = 8.
+        * The path has a distance of 6: (0, 1, 4, 3, 6, 7, 8).
+        */
+       public static ColoredGraph oneValidPath3(){
+           int[][] list = 
+           {
+               {1,3,4},
+               {0,2,4},
+               {1,5},
+               {0,4,6},
+               {0,1,3,5,7,8},
+               {2,4,7,8},
+               {3,7},
+               {4,5,6,8},
+               {4,5,7}
+           };
+           String[][] colors = 
+           {
+               {"red","blue","yellow"},
+               {"red","blue","yellow"},
+               {"blue","yellow"},
+               {"blue","blue","red"},
+               {"yellow","yellow","blue","red","blue","red"},
+               {"yellow","red","yellow","red"},
+               {"red","yellow"},
+               {"blue","yellow","yellow","blue"},
+               {"red","red","blue"}
+           };
+           return new ColoredGraph(list, colors);
+       }
 
     public static void main(String[] args){
 
         ColoredGraph oneValidPath = GraphDriver.oneValidPath();
         ColoredGraph oneValidPath2 = GraphDriver.oneValidPath2();
+        ColoredGraph oneValidPath3 = GraphDriver.oneValidPath3();
         ColoredGraph twoValidPaths = GraphDriver.twoValidPaths();
 
-        //System.out.println("Graph Representation: \n" + oneValidPath.toString());
-        //System.out.println(oneValidPath.coloredMaze(0, 8));
-        //System.out.println(Arrays.toString(oneValidPath.getSolution(0, 8)));
+        // Test 1
+        System.out.println("---- Test 1 ----");
+        System.out.println("Graph Representation: \n" + oneValidPath.toString());
+        System.out.println(oneValidPath.coloredMaze(0, 7));
+        System.out.println(Arrays.toString(oneValidPath.getSolution(0, 7)));
+
+        // Test 2
+        System.out.println("---- Test 2 ----");
         System.out.println("Graph Representation: \n" + oneValidPath2.toString());
         System.out.println(oneValidPath2.coloredMaze(0, 5));
         System.out.println(Arrays.toString(oneValidPath2.getSolution(0, 5)));
-        //System.out.println("Graph Representation: \n" + twoValidPaths.toString());
-        //System.out.println(twoValidPaths.coloredMaze(0, 7));
-        //System.out.println(Arrays.toString(twoValidPaths.getSolution(0, 7)));
+
+        
+        // Test 3
+        System.out.println("---- Test 3 ----");
+        System.out.println("Graph Representation: \n" + oneValidPath3.toString());
+        System.out.println(oneValidPath3.coloredMaze(0, 8));
+        System.out.println(Arrays.toString(oneValidPath3.getSolution(0, 8)));
+
+        // Test 4
+        System.out.println("---- Test 4 ----");
+        System.out.println("Graph Representation: \n" + twoValidPaths.toString());
+        System.out.println(twoValidPaths.coloredMaze(0, 7));
+        System.out.println(Arrays.toString(twoValidPaths.getSolution(0, 7)));
 
         
     }//main
