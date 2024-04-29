@@ -141,13 +141,37 @@ public class GraphDriver{
            };
            return new ColoredGraph(list, colors);
        }
-
+/**
+        * Creates a colored graph. There is no valid colored path from start = 0 to t = 5.
+        */
+        public static ColoredGraph noValidPath(){
+            int[][] list = 
+            {
+                {1,3,4},
+                {0,2,4,5},
+                {1,5},
+                {0,4},
+                {0,1,3,5},
+                {1,2,4}
+            };
+            String[][] colors = 
+            {
+                {"red","red","yellow"},
+                {"red","blue","yellow","blue"},
+                {"blue","red"},
+                {"red","blue"},
+                {"yellow","yellow","blue","red"},
+                {"blue","red","red"}
+            };
+            return new ColoredGraph(list, colors);
+        }
     public static void main(String[] args){
 
         ColoredGraph oneValidPath = GraphDriver.oneValidPath();
         ColoredGraph oneValidPath2 = GraphDriver.oneValidPath2();
         ColoredGraph oneValidPath3 = GraphDriver.oneValidPath3();
         ColoredGraph twoValidPaths = GraphDriver.twoValidPaths();
+        ColoredGraph noValidPath = GraphDriver.noValidPath();
 
         // Test 1
         System.out.println("---- Test 1 ----");
@@ -173,6 +197,12 @@ public class GraphDriver{
         System.out.println("Graph Representation: \n" + twoValidPaths.toString());
         System.out.println(twoValidPaths.coloredMaze(0, 7));
         System.out.println(Arrays.toString(twoValidPaths.getSolution(0, 7)));
+        
+        // Test 5
+        System.out.println("---- Test 5 ----");
+        System.out.println("Graph Representation: \n" + noValidPath.toString());
+        System.out.println(noValidPath.coloredMaze(0, 5));
+        System.out.println(Arrays.toString(noValidPath.getSolution(0, 5)));
 
         
     }//main
