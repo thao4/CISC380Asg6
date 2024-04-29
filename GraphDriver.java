@@ -86,8 +86,8 @@ public class GraphDriver{
         return new ColoredGraph(list, colors);
     }
  /**
-     * Creates a colored graph. There is one valid colored path from start = 0 to t = 7.
-     * The path has a distance of 3: (0, 3, 4, 7).
+     * Creates a colored graph. There is one valid colored path from start = 0 to t = 5.
+     * The path has a distance of 3: (0, 1, 4, 5).
      */
     public static ColoredGraph oneValidPath2(){
         int[][] list = 
