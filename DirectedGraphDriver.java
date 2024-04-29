@@ -25,14 +25,57 @@ public class DirectedGraphDriver {
     public static DirectedGraph createSimpleGraph() {
 
         int[][] list = { { 1 },
-                {}
+                { }
         };
 
         DirectedGraph graph = new DirectedGraph(list);
 
         return graph;
     }// createSimpleGraph
+    
+    public static DirectedGraph createSimpleGraph2() {
 
+        int[][] list = { {1,2},
+                {},
+                {4},
+                {1,2},
+                {3}
+        };
+
+        DirectedGraph graph = new DirectedGraph(list);
+
+        return graph;
+    }// createSimpleGraph2
+
+    public static DirectedGraph createSimpleGraph3() {
+
+        int[][] list = { {1,2},
+                {3},
+                {3},
+                {},
+                {5},
+                {}
+        };
+
+        DirectedGraph graph = new DirectedGraph(list);
+
+        return graph;
+    }// createSimpleGraph3
+
+    public static DirectedGraph createSimpleGraph4() {
+
+        int[][] list = { {1,2},
+                {3},
+                {3},
+                {},
+                {5},
+                {4}
+        };
+
+        DirectedGraph graph = new DirectedGraph(list);
+
+        return graph;
+    }// createSimpleGraph4
     /**
      * Creates a graph representation of a directed binary tree with the given
      * amount of nodes.
@@ -87,11 +130,31 @@ public class DirectedGraphDriver {
 
     public static void main(String[] args) {
 
-        DirectedGraph graph = DirectedGraphDriver.createBinaryTree(7);
-        // DirectedGraph graph = DirectedGraphDriver.createSimpleGraph();
+        DirectedGraph graph = DirectedGraphDriver.createSimpleGraph();
+        DirectedGraph graph2 = DirectedGraphDriver.createBinaryTree(7);
+        DirectedGraph graph3 = DirectedGraphDriver.createSimpleGraph2();
+        DirectedGraph graph4 = DirectedGraphDriver.createSimpleGraph3();
+        DirectedGraph graph5 = DirectedGraphDriver.createSimpleGraph4();
 
-        System.out.println("is Acyclic: " + graph.isAcyclic());
+        System.out.println("Test 1: Expected: true");
         System.out.println("Graph Representation: \n" + graph.toString());
+        System.out.println("is Acyclic: " + graph.isAcyclic());
+        
+        System.out.println("\nTest 2: Expected: true");
+        System.out.println("Graph Representation: \n" + graph2.toString());
+        System.out.println("is Acyclic: " + graph2.isAcyclic());
+        
+        System.out.println("\nTest 3: Expected: false");
+        System.out.println("Graph Representation: \n" + graph3.toString());
+        System.out.println("is Acyclic: " + graph3.isAcyclic());
+        
+        System.out.println("\nTest 4: Expected: true");
+        System.out.println("Graph Representation: \n" + graph4.toString());
+        System.out.println("is Acyclic: " + graph4.isAcyclic());
+
+        System.out.println("\nTest 5: Expected: false");
+        System.out.println("Graph Representation: \n" + graph5.toString());
+        System.out.println("is Acyclic: " + graph5.isAcyclic());
 
     }// main
 
