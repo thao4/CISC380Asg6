@@ -85,16 +85,44 @@ public class GraphDriver{
         };
         return new ColoredGraph(list, colors);
     }
-
+ /**
+     * Creates a colored graph. There is one valid colored path from start = 0 to t = 7.
+     * The path has a distance of 3: (0, 3, 4, 7).
+     */
+    public static ColoredGraph oneValidPath2(){
+        int[][] list = 
+        {
+            {1,3,4},
+            {0,2,4,5},
+            {1,5},
+            {0,4},
+            {0,1,3,5},
+            {1,2,4}
+        };
+        String[][] colors = 
+        {
+            {"red","blue","yellow"},
+            {"red","blue","yellow","yellow"},
+            {"blue","red"},
+            {"blue","blue"},
+            {"yellow","yellow","blue","blue"},
+            {"yellow","red","blue"}
+        };
+        return new ColoredGraph(list, colors);
+    }
 
     public static void main(String[] args){
 
         ColoredGraph oneValidPath = GraphDriver.oneValidPath();
+        ColoredGraph oneValidPath2 = GraphDriver.oneValidPath2();
         ColoredGraph twoValidPaths = GraphDriver.twoValidPaths();
 
-        System.out.println("Graph Representation: \n" + oneValidPath.toString());
-        System.out.println(oneValidPath.coloredMaze(0, 7));
-        System.out.println(Arrays.toString(oneValidPath.getSolution(0, 7)));
+        //System.out.println("Graph Representation: \n" + oneValidPath.toString());
+        //System.out.println(oneValidPath.coloredMaze(0, 8));
+        //System.out.println(Arrays.toString(oneValidPath.getSolution(0, 8)));
+        System.out.println("Graph Representation: \n" + oneValidPath2.toString());
+        System.out.println(oneValidPath2.coloredMaze(0, 5));
+        System.out.println(Arrays.toString(oneValidPath2.getSolution(0, 5)));
         //System.out.println("Graph Representation: \n" + twoValidPaths.toString());
         //System.out.println(twoValidPaths.coloredMaze(0, 7));
         //System.out.println(Arrays.toString(twoValidPaths.getSolution(0, 7)));
