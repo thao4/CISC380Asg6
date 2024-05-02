@@ -2,6 +2,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Queue;
 
 
 
@@ -216,49 +217,71 @@ public class ColoredGraph {
 	*/
 	public Integer coloredMaze(int start, int end)
 	{
-		int pathCost = 0;
-		String requiredColor = "red";
-		int current = start;
-		boolean pathComplete = false;
+		//Queue implemented to manage the nodes that need to visited next 
+		Queue<Integer> queue = new LinkedList<>();
+		//boolean arr to keep track of which nodes were visited 
+		boolean[] visited = new boolean[nodes.size()];
+		//int arr to store the length from the start node to each node 
+		int[] length = new int[nodes.size()];
+		//string arr to store the colors of the edges used to reach each node 
+		String[] prevColor = new String[nodes.size()];
 
-		//Keep looping until end is reached or no path is found 
-		while(current != end && pathComplete == false){
-			List<Edge> edges = findNode(current).getEdges();
-			boolean next = false;
+		//Initialize all the array values 
+		for(int i = 0; i < nodes.size(); i++){
+			visited[i] = false;
+			length[i] = nodes.size() - 1;
+			prevColor[i] = "";
+		}
 
-			//graph traversal: navigate through the graph based on the edge color sequence of red -> yellow -> blue
-			for(Edge edge : edges){
-				if(edge.getColor().equals(requiredColor)){
-					current = edge.getOther(current).getData();
-					pathCost++;
-					next = true;
+		//update and add the start node to the queue 
+		queue.add(start);
+		visited[start] = true;
+		length[start] = 0;
 
-					//Update the required color to the next color in the sequence
-					if(requiredColor.equals("red")){
-						requiredColor = "yellow";
-					}else if(requiredColor.equals("yellow")){
-						requiredColor = "blue";
-					}else if(requiredColor.equals("blue")){
-						requiredColor = "red";
+		//continue loop if there are nodes in the queue 
+		while(!queue.isEmpty()){
+			int current = queue.poll();
+
+			//traverse through the edges 
+			for(Edge edge : nodes.get(current).getEdges()){
+				GraphNode neighbor = edge.getOther(current);
+				int nextIndex = neighbor.getData();
+				String color = edge.getColor();
+
+				//visiting check to ensure we do not revisit nodes 
+				if(!visited[nextIndex] && ColorSequence(prevColor[current], color)){
+					visited[nextIndex] = true;
+					length[nextIndex] = length[current] + 1;
+					prevColor[nextIndex] = color;
+					queue.add(nextIndex);
+
+					//return path if the nextIndex is the target end node 
+					if(nextIndex == end){
+						return length[nextIndex];
 					}
-					break;
 				}
-			}
-			//If there is no next color found, then end the search 
-			if(!next){
-				pathComplete = true;
-			}
-		}
-		//Check if a valid path has been found and if we have successfully reached the end 
-		if(current == end && requiredColor.equals("red")){
-			return pathCost;
-		}else{
-			
-			return null;
 
+			}
 		}
+		//if no path is found
+		return null;
 		
 		
+	}
+
+	//Private helper method that takes care of color sequence when going through path 
+	private boolean ColorSequence(String prevColor, String currentColor){
+		if(prevColor.equals("")){
+			return currentColor.equals("red");
+		}else if(prevColor.equals("red")){
+			return currentColor.equals("yellow");
+		}else if(prevColor.equals("yellow")){
+			return currentColor.equals("blue");
+		}else if(prevColor.equals("blue")){
+			return currentColor.equals("red");
+		}else{
+			return false;
+		}
 	}
 
 
@@ -273,52 +296,71 @@ public class ColoredGraph {
 	*/
 	public int[] getSolution(int start, int end)
 	{
-		List <Integer> path = new ArrayList<>();
-		String requiredColor = "red";
-		int current = start;
-		boolean pathComplete = false;
-		//adding start to path 
-		path.add(start);
+		//Queue implemented to manage the nodes that need to visited next 
+		Queue<Integer> queue = new LinkedList<>();
+		//boolean arr to keep track of which nodes were visited 
+		boolean[] visited = new boolean[nodes.size()];
+		//int arr to store the length from the start node to each node
+		int[] length = new int[nodes.size()];
+		//string arr to store the colors of the edges used to reach each node 
+		String[] prevColor = new String[nodes.size()];
+		//int arr to keep track of the previous vertex 
+		int[] prev = new int[nodes.size()];
 
-		//Keep looping until end is reached or no path is found 
-		while(current != end && !pathComplete){
-			List<Edge> edges = findNode(current).getEdges();
-			boolean next = false;
+		//Initialize all the array values 
+		for(int i = 0; i < nodes.size(); i++){
+			visited[i] = false;
+			length[i] = nodes.size() - 1;
+			prev[i] = -1;
+			prevColor[i] = "";
+	
+		}
+		//update and add the start node to the queue 
+		queue.add(start);
+		visited[start] = true;
+		length[start] = 0;
 
-			//graph traversal: navigate through the graph based on the edge color sequence of red -> yellow -> blue
-			for(Edge edge : edges){
-				if(edge.getColor().equals(requiredColor)){
-					current = edge.getOther(current).getData();
-					//add new vertex to path 
-					path.add(current);
-					next = true;
+		//continue loop if there are nodes in the queue 
+		while(!queue.isEmpty()){
+			int current = queue.poll();
 
-					//Update the required color to the next color in the sequence
-					if(requiredColor.equals("red")){
-						requiredColor = "yellow";
-					}else if(requiredColor.equals("yellow")){
-						requiredColor = "blue";
-					}else if(requiredColor.equals("blue")){
-						requiredColor = "red";
+			//visiting check to ensure we do not revisit nodes and update 
+			for(Edge edge : nodes.get(current).getEdges()){
+				GraphNode neighbor = edge.getOther(current);
+				int nextIndex = neighbor.getData();
+				String color = edge.getColor();
+
+				if(!visited[nextIndex] && ColorSequence(prevColor[current], color)){
+					visited[nextIndex] = true;
+					length[nextIndex] = length[current] + 1;
+					prevColor[nextIndex] = color;
+					prev[nextIndex] = current;
+					queue.add(nextIndex);
+
+					//check for the end node and recover the path 
+					if(nextIndex == end){
+						List<Integer> path = new ArrayList<>();
+						int currentVertex = end;
+						while(currentVertex != -1){
+							path.add(currentVertex);
+							currentVertex = prev[currentVertex];
+						}
+
+						int[] pathArr = new int[path.size()];
+						for(int i = 0; i < pathArr.length; i++){
+							pathArr[i] = path.get(pathArr.length - 1 - i);
+						}
+						return pathArr;
 					}
-					break;
 				}
-			}
-			//If there is no next color found, then end the search 
-			if(!next){
-				pathComplete = true;
-			}
-		}
-		//Check if a valid path has been found and if we have successfully reached the end 
-		if(current == end && requiredColor.equals("red")){
-			//Convert List<Integer> to an int[]
-			int[] result = path.stream().mapToInt(i -> i).toArray();
-			return result;
-		}else{
-			
-			return null;
 
+			}
 		}
+	
+		return null;
+		
+		
+	
 	}
 
 
