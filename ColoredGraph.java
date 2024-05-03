@@ -217,73 +217,57 @@ public class ColoredGraph {
 	*/
 	public Integer coloredMaze(int start, int end)
 	{
-		//Queue implemented to manage the nodes that need to visited next 
-		Queue<Integer> queue = new LinkedList<>();
-		//boolean arr to keep track of which nodes were visited 
-		boolean[] visited = new boolean[nodes.size()];
-		//int arr to store the length from the start node to each node 
-		int[] length = new int[nodes.size()];
-		//string arr to store the colors of the edges used to reach each node 
-		String[] prevColor = new String[nodes.size()];
-
-		//Initialize all the array values 
-		for(int i = 0; i < nodes.size(); i++){
-			visited[i] = false;
-			length[i] = nodes.size() - 1;
-			prevColor[i] = "";
+		//YOUR CODE HERE
+		Queue<GraphNode> queue = new LinkedList<GraphNode>();
+		for(GraphNode node : nodes){
+			node.prevColor = "";
+			node.prev = null;
+			node.length = nodes.size()-1;
 		}
-
-		//update and add the start node to the queue 
-		queue.add(start);
-		visited[start] = true;
-		length[start] = 0;
-
-		//continue loop if there are nodes in the queue 
+		queue.add(findNode(start));
+		findNode(start).length = 0;
+		findNode(start).prevColor = "blue";
+		int counter;
 		while(!queue.isEmpty()){
-			int current = queue.poll();
-
-			//traverse through the edges 
-			for(Edge edge : nodes.get(current).getEdges()){
-				GraphNode neighbor = edge.getOther(current);
-				int nextIndex = neighbor.getData();
-				String color = edge.getColor();
-
-				//visiting check to ensure we do not revisit nodes 
-				if(!visited[nextIndex] && ColorSequence(prevColor[current], color)){
-					visited[nextIndex] = true;
-					length[nextIndex] = length[current] + 1;
-					prevColor[nextIndex] = color;
-					queue.add(nextIndex);
-
-					//return path if the nextIndex is the target end node 
-					if(nextIndex == end){
-						return length[nextIndex];
+			GraphNode node = queue.poll();
+			counter = 0;
+			for(Edge edge : node.getEdges()){
+				GraphNode other = edge.getOther(node.getData());
+				if(nextSequence(node.prevColor,edge.getColor())&&other.length==nodes.size()-1){
+					counter++;
+					queue.add(other);
+					other.length = node.length+1;
+					other.prev = node;
+					other.prevColor = edge.getColor();
+					if(other.getData()==end&&other.prevColor.equals("blue")){
+						return other.length;
+					} 
+					if(other.getData()==end){
+						other.length = nodes.size()-1;
 					}
+					
 				}
 
 			}
+			if(counter == 0) {
+				node.length = nodes.size()-1;
+			}
 		}
-		//if no path is found
 		return null;
-		
-		
 	}
 
-	//Private helper method that takes care of color sequence when going through path 
-	private boolean ColorSequence(String prevColor, String currentColor){
-		if(prevColor.equals("")){
-			return currentColor.equals("red");
-		}else if(prevColor.equals("red")){
-			return currentColor.equals("yellow");
-		}else if(prevColor.equals("yellow")){
-			return currentColor.equals("blue");
-		}else if(prevColor.equals("blue")){
-			return currentColor.equals("red");
-		}else{
-			return false;
-		}
+	private boolean nextSequence(String prevColor, String color){
+		if(prevColor.equals("blue")){
+			return color.equals("red");
+		} 
+		if(prevColor.equals("red")){
+			return color.equals("yellow");
+		} 
+		if(prevColor.equals("yellow")){
+			return color.equals("blue");
+		} 
+		return false;
 	}
-
 
 	/**
 	*EXTRA CREDIT:
@@ -296,71 +280,23 @@ public class ColoredGraph {
 	*/
 	public int[] getSolution(int start, int end)
 	{
-		//Queue implemented to manage the nodes that need to visited next 
-		Queue<Integer> queue = new LinkedList<>();
-		//boolean arr to keep track of which nodes were visited 
-		boolean[] visited = new boolean[nodes.size()];
-		//int arr to store the length from the start node to each node
-		int[] length = new int[nodes.size()];
-		//string arr to store the colors of the edges used to reach each node 
-		String[] prevColor = new String[nodes.size()];
-		//int arr to keep track of the previous vertex 
-		int[] prev = new int[nodes.size()];
-
-		//Initialize all the array values 
-		for(int i = 0; i < nodes.size(); i++){
-			visited[i] = false;
-			length[i] = nodes.size() - 1;
-			prev[i] = -1;
-			prevColor[i] = "";
-	
+		//YOUR CODE HERE
+		// fill node.forward values
+		Integer mazeLength = coloredMaze(start,end);
+		if(mazeLength==null){
+			return null;
 		}
-		//update and add the start node to the queue 
-		queue.add(start);
-		visited[start] = true;
-		length[start] = 0;
-
-		//continue loop if there are nodes in the queue 
-		while(!queue.isEmpty()){
-			int current = queue.poll();
-
-			//visiting check to ensure we do not revisit nodes and update 
-			for(Edge edge : nodes.get(current).getEdges()){
-				GraphNode neighbor = edge.getOther(current);
-				int nextIndex = neighbor.getData();
-				String color = edge.getColor();
-
-				if(!visited[nextIndex] && ColorSequence(prevColor[current], color)){
-					visited[nextIndex] = true;
-					length[nextIndex] = length[current] + 1;
-					prevColor[nextIndex] = color;
-					prev[nextIndex] = current;
-					queue.add(nextIndex);
-
-					//check for the end node and recover the path 
-					if(nextIndex == end){
-						List<Integer> path = new ArrayList<>();
-						int currentVertex = end;
-						while(currentVertex != -1){
-							path.add(currentVertex);
-							currentVertex = prev[currentVertex];
-						}
-
-						int[] pathArr = new int[path.size()];
-						for(int i = 0; i < pathArr.length; i++){
-							pathArr[i] = path.get(pathArr.length - 1 - i);
-						}
-						return pathArr;
-					}
-				}
-
-			}
+		int[] soln = new int[mazeLength+1];
+		GraphNode node = findNode(end);
+		int counter = 0;
+		// using node.forward values to check the next node used in the solution
+		while(node.prev!=null){
+			soln[mazeLength-counter] = node.getData();
+			node = node.prev;
+			counter++;
 		}
-	
-		return null;
-		
-		
-	
+		soln[0] = start;
+		return soln;
 	}
 
 
@@ -371,7 +307,9 @@ public class ColoredGraph {
 
 		private int data;
 		private int degree;
-
+		private int length;
+		private GraphNode prev;
+		private String prevColor;
 		private LinkedList<Edge> edges;
 
 		public GraphNode(int data) {
@@ -452,7 +390,7 @@ public class ColoredGraph {
 		GraphNode v;
 		GraphNode u;
 		String color;
-
+		
 		public Edge(GraphNode v, GraphNode u, String color)
 		{
 			this.v = v;
