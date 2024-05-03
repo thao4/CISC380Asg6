@@ -92,12 +92,12 @@ public class GraphDriver{
     public static ColoredGraph oneValidPath2(){
         int[][] list = 
         {
-            {1,3,4},
-            {0,2,4,5},
-            {1,5},
-            {0,4},
-            {0,1,3,5},
-            {1,2,4}
+            {1,3,4}, 
+            {0,2,4,5}, 
+            {1,5}, 
+            {0,4}, 
+            {0,1,3,5}, 
+            {1,2,4} 
         };
         String[][] colors = 
         {
@@ -176,33 +176,43 @@ public class GraphDriver{
         // Test 1
         System.out.println("---- Test 1 ----");
         System.out.println("Graph Representation: \n" + oneValidPath.toString());
-        System.out.println(oneValidPath.coloredMaze(0, 7));
-        System.out.println(Arrays.toString(oneValidPath.getSolution(0, 7)));
+        System.out.println("Actual: "+oneValidPath.coloredMaze(0, 7));
+        System.out.println("Expected: 3");
+        System.out.println("Actual: "+Arrays.toString(oneValidPath.getSolution(0, 7)));
+        System.out.println("Expected: [0, 3, 4, 7]");
 
         // Test 2
         System.out.println("---- Test 2 ----");
         System.out.println("Graph Representation: \n" + oneValidPath2.toString());
-        System.out.println(oneValidPath2.coloredMaze(0, 5));
-        System.out.println(Arrays.toString(oneValidPath2.getSolution(0, 5)));
+        System.out.println("Actual: "+oneValidPath2.coloredMaze(0, 5));
+        System.out.println("Expected: 3");
+        System.out.println("Actual: "+Arrays.toString(oneValidPath2.getSolution(0, 5)));
+        System.out.println("Expected: [0, 1, 4, 5]");
 
         
         // Test 3
         System.out.println("---- Test 3 ----");
         System.out.println("Graph Representation: \n" + oneValidPath3.toString());
-        System.out.println(oneValidPath3.coloredMaze(0, 8));
-        System.out.println(Arrays.toString(oneValidPath3.getSolution(0, 8)));
+        System.out.println("Actual: "+oneValidPath3.coloredMaze(0, 8));
+        System.out.println("Expected: 6");
+        System.out.println("Actual: "+Arrays.toString(oneValidPath3.getSolution(0, 8)));
+        System.out.println("Expected: [0, 1, 4, 3, 6, 7, 8]");
 
         // Test 4
         System.out.println("---- Test 4 ----");
         System.out.println("Graph Representation: \n" + twoValidPaths.toString());
-        System.out.println(twoValidPaths.coloredMaze(0, 7));
-        System.out.println(Arrays.toString(twoValidPaths.getSolution(0, 7)));
+        System.out.println("Actual: "+twoValidPaths.coloredMaze(0, 7));
+        System.out.println("Expected: 6 or 3");
+        System.out.println("Actual: "+Arrays.toString(twoValidPaths.getSolution(0, 7)));
+        System.out.println("Expected: [0, 3, 5, 6, 8, 9, 7] or [0, 3, 4, 7]");
         
         // Test 5
         System.out.println("---- Test 5 ----");
         System.out.println("Graph Representation: \n" + noValidPath.toString());
-        System.out.println(noValidPath.coloredMaze(0, 5));
-        System.out.println(Arrays.toString(noValidPath.getSolution(0, 5)));
+        System.out.println("Actual: "+noValidPath.coloredMaze(0, 5));
+        System.out.println("Expected: null");
+        System.out.println("Actual: "+Arrays.toString(noValidPath.getSolution(0, 5)));
+        System.out.println("Expected: null");
 
         
     }//main
