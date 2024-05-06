@@ -243,8 +243,11 @@ public class ColoredGraph {
 		findNode(start).prevColor.offer(2); // want a red edge, so assume that the starting node came from a blue edge
 		findNode(start).length[2] = 0; 
 
-		// will run for every node + some extra
-		// extra nodes will be checked due to some of them coming in with different previous color edges
+		// Will run for every node + some extra
+		// Extra nodes will be checked due to some of them coming in with different previous color edges
+		// In the worst case, it will at most check every node and its edges 3 times due to 
+		// possibility of the node coming from all three colors
+		
 		while (!queue.isEmpty()) {
 			GraphNode node = queue.poll();
 			int prevColor = node.prevColor.poll(); // get the color that led to this node
