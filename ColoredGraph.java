@@ -315,7 +315,7 @@ public class ColoredGraph {
 		int[] soln = new int[mazeLength + 1];
 		GraphNode node = findNode(end);
 		int counter = mazeLength;
-		int solnC = 2;
+		int solnC = 2; // end node must come from a blue edge for there to be a solution
 		// backtrack from the end node to get the path
 		while (node.data != start) {
 			soln[counter] = node.getData();

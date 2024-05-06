@@ -90,6 +90,40 @@ public class GraphDriver {
     }
 
     /**
+     * Creates a colored graph with a cycle. There are two valid colored paths from
+     * start = 0 to t = 8.
+     * The shortest path has a distance of 3: (0, 1, 2, 8).
+     * The other path has a distance of 6: (0, 3, 4, 5, 6, 7, 8).
+     */
+    public static ColoredGraph twoValidPaths3() {
+
+        int[][] list = {
+                {1, 3},
+                {0, 2},
+                {1, 8},
+                {0, 4},
+                {3, 5},
+                {4, 6},
+                {5, 7},
+                {6, 8},
+                {2,7}
+                
+        };
+        String[][] colors = {
+                {"red","red"},
+                {"red","yellow"},
+                {"yellow","blue"},
+                {"red","yellow"},
+                {"yellow","blue"},
+                {"blue","red"},
+                {"red","yellow"},
+                {"yellow","blue"},
+                {"blue","blue"}
+        };
+        return new ColoredGraph(list, colors);
+    }
+
+    /**
      * Creates a colored graph. There is one valid colored path from start = 0 to t
      * = 7.
      * The path has a distance of 3: (0, 3, 4, 7).
@@ -226,6 +260,8 @@ public class GraphDriver {
         return new ColoredGraph(list, colors);
     }
 
+    
+
     /**
      * Creates a colored graph. There is no valid colored path from start = 0 to t =
      * 5.
@@ -249,6 +285,24 @@ public class GraphDriver {
         };
         return new ColoredGraph(list, colors);
     }
+    
+    /**
+     * Creates a colored graph. There is no valid colored path from start = 0 to t =
+     * 2.
+     */
+    public static ColoredGraph noValidPath2() {
+        int[][] list = {
+                {1},
+                {0,2},
+                {1}
+        };
+        String[][] colors = {
+                {"red"},
+                {"red","yellow"},
+                {"yellow"}
+        };
+        return new ColoredGraph(list, colors);
+    }
 
     public static void main(String[] args) {
 
@@ -259,7 +313,9 @@ public class GraphDriver {
         ColoredGraph oneValidPath5 = GraphDriver.oneValidPath5();
         ColoredGraph twoValidPaths = GraphDriver.twoValidPaths();
         ColoredGraph twoValidPaths2 = GraphDriver.twoValidPaths2();
+        ColoredGraph twoValidPaths3 = GraphDriver.twoValidPaths3();
         ColoredGraph noValidPath = GraphDriver.noValidPath();
+        ColoredGraph noValidPath2 = GraphDriver.noValidPath2();
 
         // Test 1
         System.out.println("---- Test 1 ----");
@@ -324,6 +380,23 @@ public class GraphDriver {
         System.out.println("Expected: 6");
         System.out.println("Actual: " + Arrays.toString(oneValidPath5.getSolution(0, 8)));
         System.out.println("Expected: [0, 1, 4, 3, 6, 7, 8]");
+        
+        // Test 9
+        System.out.println("---- Test 9 ----");
+        System.out.println("Graph Representation: \n" + twoValidPaths3.toString());
+        System.out.println("Actual: " + twoValidPaths3.coloredMaze(0, 8));
+        System.out.println("Expected: 3");
+        System.out.println("Actual: " + Arrays.toString(twoValidPaths3.getSolution(0, 8)));
+        System.out.println("Expected: [0, 1, 2, 8]");
+
+        
+        // Test 9
+        System.out.println("---- Test 10 ----");
+        System.out.println("Graph Representation: \n" + noValidPath2.toString());
+        System.out.println("Actual: " + noValidPath2.coloredMaze(0, 2));
+        System.out.println("Expected: null");
+        System.out.println("Actual: " + Arrays.toString(noValidPath2.getSolution(0, 2)));
+        System.out.println("Expected: null");
     }// main
 
 }// class
