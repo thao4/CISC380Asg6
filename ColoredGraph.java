@@ -223,15 +223,12 @@ public class ColoredGraph {
 		queue.add(findNode(start));
 		findNode(start).length = 0;
 		findNode(start).prevColor = "blue";
-		int counter; // keep count of the things node has explored based on its color sequence
 		while (!queue.isEmpty()) {
 			GraphNode node = queue.poll();
-			counter = 0;
 			for (Edge edge : node.getEdges()) {
 				GraphNode other = edge.getOther(node.getData());
 				// if edge is the next color in the sequence and the other node is not visited
 				if (nextSequence(node.prevColor, edge.getColor()) && other.length == nodes.size() - 1) {
-					counter++;
 					queue.add(other);
 					other.length = node.length + 1;
 					other.prev = node;
@@ -240,18 +237,8 @@ public class ColoredGraph {
 					if (other.getData() == end && other.prevColor.equals("blue")) {
 						return other.length;
 					}
-					// if the other node is the end goal but the edge connecting to it is not blue
-					if (other.getData() == end) {
-						other.length = nodes.size() - 1;
-					}
-
 				}
 
-			}
-			// if this node did not explore any path that led to the goal based on its color
-			// sequence, put it back on track
-			if (counter == 0) {
-				node.length = nodes.size() - 1;
 			}
 		}
 		return null;
@@ -291,7 +278,7 @@ public class ColoredGraph {
 	 */
 	public int[] getSolution(int start, int end) {
 		// YOUR CODE HERE
-		// fill node.forward values
+		// check if there is a solution
 		Integer mazeLength = coloredMaze(start, end);
 		if (mazeLength == null) {
 			return null;
@@ -299,7 +286,7 @@ public class ColoredGraph {
 		int[] soln = new int[mazeLength + 1];
 		GraphNode node = findNode(end);
 		int counter = 0;
-		// using node.forward values to check the next node used in the solution
+		// backtrack from the end node to get the path
 		while (node.prev != null) {
 			soln[mazeLength - counter] = node.getData();
 			node = node.prev;

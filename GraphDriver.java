@@ -218,9 +218,9 @@ public class GraphDriver {
                 { "blue", "yellow" },
                 { "yellow", "blue", "red", "red" },
                 { "yellow", "yellow", "blue", "red", "blue", "red" }, // 4
-                { "yellow", "red", "yellow", "red" },
+                { "yellow", "red", "red", "red" },
                 { "red", "yellow" },
-                { "blue", "red", "yellow", "yellow", "blue" },
+                { "blue", "red", "red", "yellow", "blue" },
                 { "red", "red", "blue" }
         };
         return new ColoredGraph(list, colors);
