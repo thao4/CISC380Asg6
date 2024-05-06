@@ -231,12 +231,10 @@ public class ColoredGraph {
 			node.prev = new GraphNode[3];
 			node.length = new int[3];
 
-			node.prev[0] = null;
-			node.prev[1] = null;
-			node.prev[2] = null;
-			node.length[0] = nodes.size()-1;
-			node.length[1] = nodes.size()-1;
-			node.length[2] = nodes.size()-1;
+			for(int i = 0; i < 3; i++){
+				node.prev[i] = null;
+				node.length[i] = nodes.size()-1;
+			}
 		}
 
 		queue.add(findNode(start));
@@ -247,7 +245,7 @@ public class ColoredGraph {
 		// Extra nodes will be checked due to some of them coming in with different previous color edges
 		// In the worst case, it will at most check every node and its edges 3 times due to 
 		// possibility of the node coming from all three colors
-		
+
 		while (!queue.isEmpty()) {
 			GraphNode node = queue.poll();
 			int prevColor = node.prevColor.poll(); // get the color that led to this node
